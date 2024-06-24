@@ -2,21 +2,25 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <!--Set viewport scaling-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <!--Leaflet CSS file-->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
         crossorigin=""/>
+        <!--Leaflet JavaScript file-->
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
+        <!--Webpage Title-->
         <title>Get distance from current location to KPU library</title>
     </head>
     <body>
         <!--Set size of map-->
         <div id = "map" style = "width: 900px; height: 580px"></div>
 
+        <!--JavaScript code for map-->
         <script>
-        
             //Initialize map and zoom into user's current location
             var map = L.map('map').locate({setView: true, maxZoom: 20});
 
@@ -42,10 +46,10 @@
                     color: 'green'
                 });
 
-                //Add the line to the map
+                //Place line on the map
                 distLine.addTo(map);
 
-                //Calculate distance between pointers and convert to kilometers
+                //Calculate distance between markers and convert to kilometers
                 let dist = map.distance(userLatLng, libLatLng)/1000;
 
                 //Get dist element for distance between pointers
@@ -66,8 +70,7 @@
             map.on('locationfound', onLocationFound);
 
             //locationerror listener for when geolocation is not possible
-            map.on('locationerror', onLocationError);
-                
+            map.on('locationerror', onLocationError);    
         </script>
 
         <!--Instructions-->
