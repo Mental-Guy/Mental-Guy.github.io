@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+        <title>Get distance from current location to KPU library</title>
+    </head>
+    <body>
+        <!--Set size of map-->
+        <div id = "map" style = "width: 900px; height: 580px"></div>
+
+        <script>
+        
+            //Initialize map and zoom into user's current location
+            var map = L.map('map').locate({setView: true, maxZoom: 20});
+
+            //Show attribution info on bottom right corner
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            //Function to run when geolocation is possible
+            function onLocationFound(e) {
+
+                //Initialize values to get pointer coordinates
+                let userLatLng = L.latLng(e.latlng);
+                let libLatLng = L.latLng(49.132341, -122.871301);
+            
+                //Place marker at user's location with pop-up message
+                L.marker(e.latlng).addTo(map)
+                    .bindPopup("You are here.")
+                    .openPopup();
+
+                //Draw green line from user coordinates to KPU library coordinates
+                distLine = L.polyline([userLatLng, libLatLng], {
+                    color: 'green'
+                });
+
+                //Add the line to the map
+                distLine.addTo(map);
+
+                //Calculate distance between pointers and convert to kilometers
+                let dist = map.distance(userLatLng, libLatLng)/1000;
+
+                //Get dist element for distance between pointers
+                document.getElementById('dist').innerHTML = dist;
+                }
+
+                //Place marker at KPU library building with pop-up message
+                L.marker([49.132341, -122.871301]).addTo(map)
+                    .bindPopup('Entrance to KPU Surrey Library.')
+                    .openPopup();
+
+            //Function to show error message when geolocation is not possible
+            function onLocationError(e) {
+                alert(e.message);
+            }
+
+            //locationfound listener for when geolocation is possible
+            map.on('locationfound', onLocationFound);
+
+            //locationerror listener for when geolocation is not possible
+            map.on('locationerror', onLocationError);
+                
+        </script>
+
+        <!--Instructions-->
+        <p>Allow your device to access your location.</p>
+
+        <!--Display distance message-->
+        <div class="result">
+            You are <span id="dist"></span> kilometers away from the KPU Surrey library.
+        </div>
+    </body>
+</html>
